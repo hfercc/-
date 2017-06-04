@@ -29,6 +29,33 @@ void LCD_Init(void);
 void TCL(int d);
 void TDL(int d);
 
+void D74() {
+  int i,j,d;
+  for(j = 0;j < 16;j++) {
+    d = 1 << (lBUFMAG[i]/500-1);
+    if(j<8) {
+      for(i=0;i<8;i++) {
+        GPIO_ResetBits(GPIOB,GPIO_Pin_0);
+        if(d&0x80) {GPIO_SetBits(GPIOB,GPIO_Pin_1);}
+        else GPIO_ResetBits(GPIOB,GPIO_Pin_1);;
+        GPIO_SetBits(GPIOB,GPIO_Pin_0);
+        delay_nus(10);
+        d <<= 1;
+      }
+    }
+    else{
+      for(i=0;i<8;i++) {
+        GPIO_ResetBits(GPIOB,GPIO_Pin_2);
+        if(d&0x80) {GPIO_SetBits(GPIOB,GPIO_Pin_3);}
+        else GPIO_ResetBits(GPIOB,GPIO_Pin_3);;
+        GPIO_SetBits(GPIOB,GPIO_Pin_2);
+        delay_nus(10);
+        d <<= 1;
+      }
+    }
+  }
+}
+
 void RCC_Configuration(void);	 //Ê±ÖÓ³õÊ¼»¯£¬¿ªÆôÍâÉèÊ±ÖÓ
 void GPIO_Configuration(void);	 //IO¿Ú³õÊ¼»¯£¬ÅäÖÃÆä¹¦ÄÜ
             //72MÊ±ÖÓÏÂ£¬Ô¼ÑÓÊ±ms
@@ -341,7 +368,7 @@ void GPIO_Configuration(void)			 //Ê¹ÓÃÄ³io¿ÚÊäÈëÊä³öÊ±£¬Ç�
 
   GPIO_InitStructure.GPIO_Mode = GPIO_Mode_Out_PP;
   GPIO_InitStructure.GPIO_Speed = GPIO_Speed_50MHz;
-  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_All;
+  GPIO_InitStructure.GPIO_Pin = GPIO_Pin_0 | GPIO_Pin_1 | GPIO_Pin_2 | GPIO_Pin_3;
   GPIO_Init(GPIOB,&GPIO_InitStructure);
 }
 
